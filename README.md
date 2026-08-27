@@ -1,4 +1,4 @@
-# Model Context Protocol (MCP)
+# Weav.com Model Context Protocol (MCP)
 
 Learn how to use the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) to enable AI agents to securely access and interact with your Weav workspace.
 
