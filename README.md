@@ -4,6 +4,15 @@ Learn how to use the [Model Context Protocol (MCP)](https://modelcontextprotocol
 
 The Weav MCP server is available for Weav workspaces.
 
+This repository documents the **workspace** server (`com.weav/mcp` at `https://mcp.weav.com/mcp`). A separate public server answers pricing and product questions without login:
+
+| Server | URL | Auth | Registry |
+|---|---|---|---|
+| Weav (this repo) | `https://mcp.weav.com/mcp` | OAuth | `com.weav/mcp` |
+| Weav Customer Service | `https://weav.com/mcp` | None | `io.github.dubdubdubco/weav-customer-service` |
+
+The public server cannot read inbox, customers, or knowledge base data. Source: [dubdubdubco/weav-site-mcp](https://github.com/dubdubdubco/weav-site-mcp).
+
 ## What is Model Context Protocol?
 
 MCP is a protocol that enables AI tools and applications to connect with Weav's data and services in a secure, standardized way. It provides a structured method for AI models to:

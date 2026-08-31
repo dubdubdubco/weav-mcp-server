@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.weav/mcp",
+  "title": "Weav",
+  "description": "Connect AI tools to Weav customer service. Search conversations, reply, and manage knowledge.",
+  "version": "1.0.1",
+  "websiteUrl": "https://docs.weav.com/api-reference/mcp",
+  "repository": {
+    "url": "https://github.com/dubdubdubco/weav-mcp-server",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.weav.com/mcp"
+    }
+  ]
+}
