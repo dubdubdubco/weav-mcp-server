@@ -11,13 +11,13 @@ This repository documents the **workspace** server (`com.weav/mcp` at `https://m
 | Weav (this repo) | `https://mcp.weav.com/mcp` | OAuth | `com.weav/mcp` |
 | Weav Customer Service | `https://weav.com/mcp` | None | `io.github.dubdubdubco/weav-customer-service` |
 
-The public server cannot read inbox, customers, or knowledge base data. Source: [dubdubdubco/weav-site-mcp](https://github.com/dubdubdubco/weav-site-mcp).
+The public server cannot read inbox, customers, training data, or Help Center data. Source: [dubdubdubco/weav-site-mcp](https://github.com/dubdubdubco/weav-site-mcp).
 
 ## What is Model Context Protocol?
 
 MCP is a protocol that enables AI tools and applications to connect with Weav's data and services in a secure, standardized way. It provides a structured method for AI models to:
 
-- Find and retrieve Weav data (conversations, customers, knowledge base)
+- Find and retrieve Weav data (conversations, customers, agent training data, Help Center articles)
 - Access specific tools and functionality provided by Weav
 - Maintain context about your Weav workspace when working with AI assistants
 
@@ -40,12 +40,12 @@ When an AI tool or application needs to access Weav data:
 
 - **Secure Access**: All data access is authenticated and authorized. Only a workspace admin or owner can finish consent.
 - **Standardized Interface**: Consistent interaction pattern across different AI tools
-- **Contextual Understanding**: AI assistants maintain awareness of your Weav inbox, customers, and knowledge base
-- **Increased Development Efficiency**: Triage conversations, reply to customers, and update your knowledge base from the AI tools you already use
+- **Contextual Understanding**: AI assistants maintain awareness of your Weav inbox, customers, agent training data, and Help Center
+- **Increased Development Efficiency**: Triage conversations, reply to customers, and manage agent training data and Help Center articles from the AI tools you already use
 
 ## Available Tools
 
-The Weav MCP server provides **11 tools** for interacting with your workspace.
+The Weav MCP server provides **32 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 21 Help Center tools.
 
 ### Conversations
 
@@ -106,11 +106,13 @@ Get a customer profile, company, and recent conversations.
 
 - Use the customer UUID returned from `search_customers`
 
-### Knowledge base
+### Agent training data
+
+These are the sources Weav AI agents answer from, separate from the public Help Center managed by the `kb_*` tools.
 
 #### **search_training_data**
 
-Search knowledge base (training data) items by title, description, type, or source.
+Search agent training data items by title, description, type, or source.
 
 **Key Features:**
 
@@ -119,7 +121,7 @@ Search knowledge base (training data) items by title, description, type, or sour
 
 #### **get_training_data**
 
-Get a single knowledge base item.
+Get a single training data item.
 
 **Key Features:**
 
@@ -127,7 +129,7 @@ Get a single knowledge base item.
 
 #### **add_training_data**
 
-Add knowledge base content as text, Q&A, or a website URL. Every agent in the workspace is given access automatically.
+Add agent training data as text, Q&A, or a website URL. Every agent in the workspace is given access automatically.
 
 **Key Features:**
 
@@ -137,7 +139,7 @@ Add knowledge base content as text, Q&A, or a website URL. Every agent in the wo
 
 #### **delete_training_data**
 
-Delete a knowledge base item.
+Delete a training data item.
 
 **Key Features:**
 
@@ -145,11 +147,212 @@ Delete a knowledge base item.
 
 #### **resync_training_data**
 
-Re-scrape an existing URL knowledge base item.
+Re-scrape an existing URL training data item.
 
 **Key Features:**
 
 - Requires the training data UUID of a URL source
+
+### Help Center knowledge base
+
+The `kb_*` tools manage the workspace's public Help Center articles and categories, separate from agent training data managed by `*_training_data`.
+
+**Browse**
+
+#### **kb_get_overview**
+
+Get counts and available locales for the Help Center.
+
+**Key Features:**
+
+- No parameters
+
+#### **kb_list_categories**
+
+List Help Center categories.
+
+**Key Features:**
+
+- Optional `limit` (1–50, default 20) and `page` (default 1)
+
+#### **kb_list_articles**
+
+List Help Center article summaries.
+
+**Key Features:**
+
+- Optional filters: `category_id` or `uncategorized`, `status` (`draft`, `published`), and `locale`
+- Optional `limit` (1–50, default 20) and `page` (default 1)
+
+#### **kb_search_articles**
+
+Search Help Center article titles and content.
+
+**Key Features:**
+
+- Required `query` (1–255 characters)
+- Optional filters: `locale`, `status` (`draft`, `published`), `category_id` or `uncategorized`
+- Optional `limit` (1–50, default 20) and `page` (default 1)
+
+#### **kb_get_article**
+
+Get a full Help Center article and its translation content.
+
+**Key Features:**
+
+- Required `article_id`; optional `locale`
+
+**Revisions**
+
+#### **kb_list_article_revisions**
+
+List revision summaries for an article.
+
+**Key Features:**
+
+- Required `article_id`; optional `locale`, `limit` (1–50, default 20), and `page` (default 1)
+
+#### **kb_get_article_revision**
+
+Get a revision's full content.
+
+**Key Features:**
+
+- Required `article_id` and `revision_id`
+
+#### **kb_restore_article_revision**
+
+Restore an article translation from a prior revision.
+
+**Key Features:**
+
+- Required `article_id` and `revision_id`; optional `expected_version`
+- Saves the current translation as a revision before restoring
+
+**Improvement proposals (read-only)**
+
+#### **kb_list_proposals**
+
+List Help Center improvement proposals.
+
+**Key Features:**
+
+- Optional `status` (`pending`, `needs_decision`, `published`, `dismissed`, `ignored`); ignored proposals are omitted by default
+- Optional `limit` (1–50, default 20) and `page` (default 1)
+
+#### **kb_get_proposal**
+
+Get full details for an improvement proposal.
+
+**Key Features:**
+
+- Required `proposal_id`
+
+**Articles**
+
+#### **kb_create_article**
+
+Create a Help Center article.
+
+**Key Features:**
+
+- Requires at least one `translations` entry with `locale`, `title`, and Markdown `content`; `excerpt` and `slug` are optional
+- Optional `category_id`, `position`, and `status` (`draft` or `published`)
+
+#### **kb_update_article**
+
+Update a Help Center article.
+
+**Key Features:**
+
+- Required `article_id`; optional `expected_version`, `category_id`, `position`, `status`, and `translations`
+- Send `category_id: null` to uncategorize; omit it to keep the current category
+- Editing an existing locale saves a revision; a new locale needs `title` and `content`
+
+#### **kb_publish_article**
+
+Publish an article immediately.
+
+**Key Features:**
+
+- Required `article_id`; optional `expected_version`
+
+#### **kb_unpublish_article**
+
+Return a published article to draft.
+
+**Key Features:**
+
+- Required `article_id`; optional `expected_version`
+
+#### **kb_delete_article**
+
+Soft-delete a Help Center article.
+
+**Key Features:**
+
+- Required `article_id`; optional `expected_version`
+
+#### **kb_delete_article_translation**
+
+Delete one translation from an article.
+
+**Key Features:**
+
+- Required `article_id` and `locale`; optional `expected_version`
+- The article must retain at least one translation
+
+#### **kb_reorder_articles**
+
+Set the order of all articles in one category group.
+
+**Key Features:**
+
+- Required `ids` containing all article UUIDs in the desired order
+- Optional `category_id`; omit it or send `null` for uncategorized articles
+
+**Categories**
+
+#### **kb_create_category**
+
+Create a Help Center category.
+
+**Key Features:**
+
+- Required `name`; optional `slug` and `position`
+
+#### **kb_update_category**
+
+Update a Help Center category.
+
+**Key Features:**
+
+- Required `category_id`; optional `name`, `slug`, and `position`
+
+#### **kb_delete_category**
+
+Delete a Help Center category.
+
+**Key Features:**
+
+- Required `category_id`; its articles become uncategorized
+
+#### **kb_reorder_categories**
+
+Set the display order of all Help Center categories.
+
+**Key Features:**
+
+- Required `ids` containing all category UUIDs in the desired order
+
+#### Help Center behavior
+
+- New articles are drafts by default. Set `status: published` on create or update, or use `kb_publish_article`, to publish immediately; there is no approval step.
+- Search first with `kb_search_articles`; update an existing article instead of creating a duplicate.
+- `kb_get_article` returns a `version`. Pass it as `expected_version` to update, publish, unpublish, delete, delete a translation, or restore. A stale version returns `PRECONDITION_FAILED` with `current_version`; re-read and retry. If the article lock cannot be acquired within its wait period, the tool returns `ARTICLE_LOCKED`; retry shortly. Other error codes include `SLUG_TAKEN`.
+- Locales match by language: `en`, `en-US`, and `en-GB` all match English content.
+- Articles created over MCP have source `mcp`; each revision records the user and MCP client that made it.
+- Help Center settings, logo and image uploads, GitHub sync, and publishing or dismissing improvement proposals are not available over MCP; use the Weav app.
 
 ## Setting things up
 
@@ -217,6 +420,8 @@ ps aux | grep mcp-remote | grep -v grep
 
 - **Authentication failures**: Restart the OAuth flow. Confirm a workspace admin or owner completed consent.
 - **401 Unauthorized**: The access token is missing, expired, or the connection was revoked in Settings.
+- **`PRECONDITION_FAILED`**: The article changed since its `expected_version`; re-read it and retry with `current_version`.
+- **`ARTICLE_LOCKED`**: The article lock wait timed out; retry shortly.
 - **Tool errors**: Confirm the IDs you pass belong to the connected workspace.
 
 ### Troubleshooting Tips
