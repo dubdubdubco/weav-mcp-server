@@ -3,7 +3,7 @@
   "name": "com.weav/mcp",
   "title": "Weav",
   "description": "Connect AI tools to Weav customer service. Triage conversations, reply, and manage your Help Center.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "websiteUrl": "https://docs.weav.com/api-reference/mcp",
   "repository": {
     "url": "https://github.com/dubdubdubco/weav-mcp-server",
