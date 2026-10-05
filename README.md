@@ -257,6 +257,8 @@ Create a Help Center article.
 **Key Features:**
 
 - Requires at least one `translations` entry with `locale`, `title`, and Markdown `content`; `excerpt` and `slug` are optional
+- `excerpt` is also used as the meta description
+- Translation entries optionally accept `seo_title` (search/social title; the page heading stays `title`), `noindex` (hide from search engines), `canonical_url` (absolute HTTP(S) URL), and `og_image_url` (HTTPS social preview image)
 - Optional `category_id`, `position`, and `status` (`draft` or `published`)
 
 #### **kb_update_article**
@@ -266,8 +268,9 @@ Update a Help Center article.
 **Key Features:**
 
 - Required `article_id`; optional `expected_version`, `category_id`, `position`, `status`, and `translations`
+- Translation entries accept the same optional SEO fields as `kb_create_article`; `excerpt` is also used as the meta description
 - Send `category_id: null` to uncategorize; omit it to keep the current category
-- Editing an existing locale saves a revision; a new locale needs `title` and `content`
+- Content edits to an existing locale save a revision; SEO-only edits do not. A new locale needs `title` and `content`
 
 #### **kb_publish_article**
 
