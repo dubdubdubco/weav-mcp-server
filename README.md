@@ -270,7 +270,7 @@ Update a Help Center article.
 - Required `article_id`; optional `expected_version`, `category_id`, `position`, `status`, and `translations`
 - Translation entries accept the same optional SEO fields as `kb_create_article`; `excerpt` is also used as the meta description
 - Send `category_id: null` to uncategorize; omit it to keep the current category
-- Editing an existing locale saves a revision; a new locale needs `title` and `content`
+- Content edits to an existing locale save a revision; SEO-only edits do not. A new locale needs `title` and `content`
 
 #### **kb_publish_article**
 
