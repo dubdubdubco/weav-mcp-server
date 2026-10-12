@@ -45,7 +45,7 @@ When an AI tool or application needs to access Weav data:
 
 ## Available Tools
 
-The Weav MCP server provides **32 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 21 Help Center tools.
+The Weav MCP server provides **37 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 26 Help Center tools.
 
 ### Conversations
 
@@ -166,10 +166,19 @@ Get counts and available locales for the Help Center.
 **Key Features:**
 
 - No parameters
+- Includes the sections in display order
 
 #### **kb_list_categories**
 
 List Help Center categories.
+
+**Key Features:**
+
+- Optional `limit` (1–50, default 20) and `page` (default 1)
+
+#### **kb_list_sections**
+
+List Help Center sections in display order.
 
 **Key Features:**
 
@@ -314,6 +323,40 @@ Set the order of all articles in one category group.
 - Required `ids` containing all article UUIDs in the desired order
 - Optional `category_id`; omit it or send `null` for uncategorized articles
 
+**Sections**
+
+#### **kb_create_section**
+
+Create a Help Center section.
+
+**Key Features:**
+
+- Required `name`; optional `slug` and `position`
+
+#### **kb_update_section**
+
+Update a Help Center section.
+
+**Key Features:**
+
+- Required `section_id`; optional `name`, `slug`, and `position`
+
+#### **kb_delete_section**
+
+Delete a Help Center section.
+
+**Key Features:**
+
+- Required `section_id`; its categories become unsectioned
+
+#### **kb_reorder_sections**
+
+Set the display order of all Help Center sections.
+
+**Key Features:**
+
+- Required `ids` containing all section UUIDs in the desired order
+
 **Categories**
 
 #### **kb_create_category**
@@ -322,7 +365,7 @@ Create a Help Center category.
 
 **Key Features:**
 
-- Required `name`; optional `slug` and `position`
+- Required `name`; optional `slug`, `position`, and `section_id`
 
 #### **kb_update_category**
 
@@ -330,7 +373,8 @@ Update a Help Center category.
 
 **Key Features:**
 
-- Required `category_id`; optional `name`, `slug`, and `position`
+- Required `category_id`; optional `name`, `slug`, `position`, and `section_id`
+- Send `section_id: null` to clear the section assignment
 
 #### **kb_delete_category**
 
