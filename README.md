@@ -45,7 +45,7 @@ When an AI tool or application needs to access Weav data:
 
 ## Available Tools
 
-The Weav MCP server provides **37 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 26 Help Center tools.
+The Weav MCP server provides **38 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 27 Help Center tools.
 
 ### Conversations
 
@@ -211,6 +211,17 @@ Get a full Help Center article and its translation content.
 
 - Required `article_id`; optional `locale`
 
+#### **kb_get_preview_link**
+
+Get a shareable link to preview a draft article, or a pending proposal, inside the whole Help Center before it is published.
+
+**Key Features:**
+
+- Provide exactly one of `article_id` (a draft article) or `proposal_id` (a pending proposal)
+- Optional `regenerate` (`true` replaces the link so the old one stops working)
+- Anyone with the link can view the preview; it never expires and is not indexed
+- `kb_create_article` and `kb_update_article` also return a `preview_url` for drafts
+
 **Revisions**
 
 #### **kb_list_article_revisions**
@@ -266,8 +277,8 @@ Create a Help Center article.
 **Key Features:**
 
 - Requires at least one `translations` entry with `locale`, `title`, and Markdown `content`; `excerpt` and `slug` are optional
-- `excerpt` is also used as the meta description
-- Translation entries optionally accept `seo_title` (search/social title; the page heading stays `title`), `noindex` (hide from search engines), `canonical_url` (absolute HTTP(S) URL), and `og_image_url` (HTTPS social preview image)
+- `excerpt` is used as the meta description when `seo_description` is empty
+- Translation entries optionally accept `seo_title` (search/social title; the page heading stays `title`), `seo_description` (search/social description; the visible excerpt is unchanged), `noindex` (hide from search engines), `canonical_url` (absolute HTTP(S) URL), and `og_image_url` (HTTPS social preview image)
 - Optional `category_id`, `position`, and `status` (`draft` or `published`)
 
 #### **kb_update_article**
@@ -277,7 +288,7 @@ Update a Help Center article.
 **Key Features:**
 
 - Required `article_id`; optional `expected_version`, `category_id`, `position`, `status`, and `translations`
-- Translation entries accept the same optional SEO fields as `kb_create_article`; `excerpt` is also used as the meta description
+- Translation entries accept the same optional SEO fields as `kb_create_article`; `excerpt` is used as the meta description when `seo_description` is empty
 - Send `category_id: null` to uncategorize; omit it to keep the current category
 - Content edits to an existing locale save a revision; SEO-only edits do not. A new locale needs `title` and `content`
 
