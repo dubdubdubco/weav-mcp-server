@@ -45,7 +45,7 @@ When an AI tool or application needs to access Weav data:
 
 ## Available Tools
 
-The Weav MCP server provides **38 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 27 Help Center tools.
+The Weav MCP server provides **39 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 28 Help Center tools.
 
 ### Conversations
 
@@ -249,7 +249,7 @@ Restore an article translation from a prior revision.
 - Required `article_id` and `revision_id`; optional `expected_version`
 - Saves the current translation as a revision before restoring
 
-**Improvement proposals (read-only)**
+**Improvement proposals**
 
 #### **kb_list_proposals**
 
@@ -267,6 +267,17 @@ Get full details for an improvement proposal.
 **Key Features:**
 
 - Required `proposal_id`
+
+#### **kb_edit_proposal**
+
+Save a pending improvement proposal's title and Markdown without publishing.
+
+**Key Features:**
+
+- Required `proposal_id`, `title` (up to 255 characters), and `content` (full replacement Markdown)
+- Only `pending` proposals can be edited; others return `PROPOSAL_CONFLICT`
+- For a new-article proposal, the linked draft is saved with it; for an update proposal, the published article is unchanged
+- Returns the updated proposal, still `pending`. Use this instead of `kb_update_article` for suggestion drafts
 
 **Articles**
 
@@ -407,7 +418,7 @@ Set the display order of all Help Center categories.
 
 - New articles are drafts by default. Set `status: published` on create or update, or use `kb_publish_article`, to publish immediately; there is no approval step.
 - Search first with `kb_search_articles`; update an existing article instead of creating a duplicate.
-- `kb_get_article` returns a `version`. Pass it as `expected_version` to update, publish, unpublish, delete, delete a translation, or restore. A stale version returns `PRECONDITION_FAILED` with `current_version`; re-read and retry. If the article lock cannot be acquired within its wait period, the tool returns `ARTICLE_LOCKED`; retry shortly. Other error codes include `SLUG_TAKEN`.
+- `kb_get_article` returns a `version`. Pass it as `expected_version` to update, publish, unpublish, delete, delete a translation, or restore. A stale version returns `PRECONDITION_FAILED` with `current_version`; re-read and retry. If the article lock cannot be acquired within its wait period, the tool returns `ARTICLE_LOCKED`; retry shortly. Other error codes include `SLUG_TAKEN` and `PROPOSAL_CONFLICT`.
 - Locales match by language: `en`, `en-US`, and `en-GB` all match English content.
 - Articles created over MCP have source `mcp`; each revision records the user and MCP client that made it.
 - Help Center settings, logo and image uploads, GitHub sync, and publishing or dismissing improvement proposals are not available over MCP; use the Weav app.
@@ -480,6 +491,7 @@ ps aux | grep mcp-remote | grep -v grep
 - **401 Unauthorized**: The access token is missing, expired, or the connection was revoked in Settings.
 - **`PRECONDITION_FAILED`**: The article changed since its `expected_version`; re-read it and retry with `current_version`.
 - **`ARTICLE_LOCKED`**: The article lock wait timed out; retry shortly.
+- **`PROPOSAL_CONFLICT`**: The proposal is no longer pending or its article changed; re-read it with `kb_get_proposal`.
 - **Tool errors**: Confirm the IDs you pass belong to the connected workspace.
 
 ### Troubleshooting Tips
