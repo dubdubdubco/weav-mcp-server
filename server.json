@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.weav/mcp",
   "title": "Weav",
-  "description": "Connect AI tools to Weav customer service. Triage conversations, reply, and manage your Help Center.",
-  "version": "1.4.0",
+  "description": "Sign up for Weav in chat, set up your AI agent, triage conversations, reply, and manage your Help Center.",
+  "version": "1.7.0",
   "websiteUrl": "https://docs.weav.com/api-reference/mcp",
   "repository": {
     "url": "https://github.com/dubdubdubco/weav-mcp-server",
