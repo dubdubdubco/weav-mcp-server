@@ -8,7 +8,7 @@ This repository documents the **workspace** server (`com.weav/mcp` at `https://m
 
 | Server | URL | Auth | Registry |
 |---|---|---|---|
-| Weav (this repo) | `https://mcp.weav.com/mcp` | OAuth | `com.weav/mcp` |
+| Weav (this repo) | `https://mcp.weav.com/mcp` | None for signup, setup key or OAuth for setup, OAuth for workspace tools | `com.weav/mcp` |
 | Weav Customer Service | `https://weav.com/mcp` | None | `io.github.dubdubdubco/weav-customer-service` |
 
 The public server cannot read inbox, customers, training data, or Help Center data. Source: [dubdubdubco/weav-site-mcp](https://github.com/dubdubdubco/weav-site-mcp).
@@ -31,8 +31,8 @@ Weav hosts a remote MCP server that follows the authenticated remote MCP specifi
 
 When an AI tool or application needs to access Weav data:
 
-1. The tool connects to Weav's MCP server
-2. A workspace admin or owner completes OAuth consent in the browser
+1. The tool connects to Weav's MCP server. New users can sign up right in the chat with `start_signup` and `verify_signup_code` (email code, no browser), then set up with the returned `setup_key`
+2. For inbox, customer, training data and Help Center tools, a workspace admin or owner signs in when the client prompts for OAuth
 3. The tool can then access relevant Weav data and functionality for that workspace
 4. The connection remains live until it is revoked
 
@@ -45,7 +45,27 @@ When an AI tool or application needs to access Weav data:
 
 ## Available Tools
 
-The Weav MCP server provides **39 tools** for interacting with your workspace: 4 conversation tools, 2 customer tools, 5 agent training data tools, and 28 Help Center tools.
+The Weav MCP server provides **48 tools**: 2 signup tools, 7 setup tools, 4 conversation tools, 2 customer tools, 5 agent training data tools, and 28 Help Center tools.
+
+### Signup (no sign-in)
+
+#### **start_signup**
+Email a 6-digit signup code to the user. Parameters: `email`.
+
+#### **verify_signup_code**
+Check the code, create a free Lite workspace, and return a `setup_key` valid for 24 hours. Parameters: `signup_token`, `code`, `company_name`. Existing accounts are told to sign in instead.
+
+### Setup (setup key or OAuth)
+
+Each setup tool takes an optional `setup_key`; omit it when signed in.
+
+- **get_setup_status**: setup checklist, next step, AI credits and plans
+- **start_website_training** / **get_training_status**: train the AI agent on a website (`website`)
+- **get_chat_widget_install**: chat widget script and install instructions
+- **kb_start_import** / **kb_import_status**: copy an existing help center into a private Weav Help Center (`url`)
+- **create_checkout_link**: Stripe Checkout link for a plan or more AI credits (`purchase`, `interval`, `quantity`)
+
+The `onboard_my_workspace` prompt walks an AI through signup and setup.
 
 ### Conversations
 
