@@ -447,13 +447,19 @@ Set the display order of all Help Center categories.
 
 ### Authentication
 
-The MCP server uses **OAuth**. When you connect, Weav opens a browser consent screen.
+Connecting needs no sign-in. Access depends on the tool:
+
+- **Signup tools** (`start_signup`, `verify_signup_code`) need no authentication; the emailed 6-digit code verifies the user
+- **Setup tools** accept the `setup_key` returned by `verify_signup_code` (valid 24 hours, setup tools only) or OAuth
+- **All other tools** use **OAuth**: the first call prompts the client to open Weav's browser consent screen
+
+For OAuth:
 
 - Only a workspace **admin** or **owner** can finish consent
 - Tokens are scoped to that workspace with the `mcp:use` ability
 - Admins can disconnect a client later in **Settings → Developers → MCP connections**
 
-There is no API-token or bearer-token shortcut. Connect through OAuth.
+There is no API-token shortcut for workspace tools. The `setup_key` is not a bearer token; pass it as the `setup_key` argument.
 
 ### Configuration Examples
 
