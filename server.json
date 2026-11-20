@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.weav/mcp",
   "title": "Weav",
-  "description": "Sign up for Weav in chat, set up your AI agent, triage conversations, reply, and manage your Help Center.",
+  "description": "Sign up for Weav in chat, set up your AI agent, triage conversations, and manage your Help Center.",
   "version": "1.7.0",
   "websiteUrl": "https://docs.weav.com/api-reference/mcp",
   "repository": {
